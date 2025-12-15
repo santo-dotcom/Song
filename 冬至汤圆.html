@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>冬至快乐 · 团圆海报</title>
+    <!-- Google Generative AI SDK via CDN -->
+    <script type="importmap">
+      {
+        "imports": {
+          "@google/generative-ai": "https://esm.run/@google/generative-ai"
+        }
+      }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+KuaiLe&display=swap');
+
+        :root {
+            --bg-color: #FFF5E6;
+            --primary-red: #FF6B6B;
+            --persimmon-orange: #FF8E53;
+            --ingot-gold: #FFD93D;
+            --text-dark: #4A4A4A;
+            --leaf-green: #6BCB77;
+            --btn-shadow: 0 4px 0 rgba(0,0,0,0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #ffe6e6;
+            font-family: 'ZCOOL KuaiLe', cursive, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* 手机外壳效果 */
+        .poster-container {
+            width: 100%;
+            max-width: 400px;
+            background: #FFFBF0;
+            border-radius: 30px;
+            box-shadow: 0 20px 40px rgba(255, 107, 107, 0.2);
+            overflow: hidden;
+            position: relative;
+            border: 8px solid white;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 顶部装饰 */
+        .header-decoration {
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background: #FFD93D;
+            border-radius: 50%;
+            opacity: 0.2;
+        }
+        .header-decoration-2 {
+            position: absolute;
+            top: 20px;
+            left: -30px;
+            width: 80px;
+            height: 80px;
+            background: #FF6B6B;
+            border-radius: 50%;
+            opacity: 0.1;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-grow: 1;
+        }
+
+        /* 标题区 */
+        .main-title {
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 2.8rem;
+            color: #D9381E;
+            text-align: center;
+            line-height: 1.1;
+            margin-top: 10px;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 0 white;
+            transform: rotate(-2deg);
+        }
+
+        .sub-tag {
+            background: #FF6B6B;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            transform: rotate(2deg);
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+            margin-bottom: 15px;
+        }
+
+        /* --- 插画区域 (保持原来的可爱风格) --- */
+        .hero-illustration {
+            width: 100%;
+            height: 160px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .bowl {
+            width: 200px;
+            height: 90px;
+            background: white;
+            border-radius: 0 0 100px 100px;
+            border: 4px solid #f0f0f0;
+            position: absolute;
+            bottom: 0;
+            z-index: 2;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        .soup {
+            position: absolute;
+            width: 100%;
+            height: 85%;
+            bottom: 0;
+            background: #FFF9C4;
+            opacity: 0.6;
+        }
+
+        .mascot {
+            position: absolute;
+            z-index: 5;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .mascot-persimmon {
+            width: 60px;
+            height: 55px;
+            background: var(--persimmon-orange);
+            border-radius: 50%;
+            bottom: 35px;
+            left: 35%;
+        }
+
+        .mascot-ingot {
+            width: 70px;
+            height: 45px;
+            background: var(--ingot-gold);
+            border-radius: 5px 5px 35px 35px;
+            bottom: 25px;
+            right: 32%;
+            animation-delay: 0.5s;
+        }
+        .mascot-ingot::before {
+            content: ''; position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+            width: 40px; height: 20px; background: #FFE66D; border-radius: 50% 50% 0 0;
+        }
+
+        /* 通用五官 */
+        .face { position: absolute; top: 55%; left: 50%; transform: translate(-50%, -50%); width: 100%; text-align: center; }
+        .eyes { display: inline-block; width: 5px; height: 5px; background: #333; border-radius: 50%; margin: 0 4px; }
+        .mouth { width: 8px; height: 4px; border-bottom: 2px solid #333; border-radius: 0 0 8px 8px; margin: 2px auto 0; }
+        .leaf { width: 16px; height: 8px; background: var(--leaf-green); position: absolute; top: -4px; left: 50%; transform: translateX(-50%); border-radius: 10px 10px 0 0; }
+
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+        /* --- 倒计时卡片 --- */
+        .countdown-card {
+            background: white;
+            padding: 10px 20px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            border: 2px solid #FFDEE9;
+            width: 90%;
+            justify-content: center;
+        }
+        .cd-text { color: #888; font-size: 0.9rem; }
+        .cd-time { font-family: 'Ma Shan Zheng', cursive; font-size: 1.4rem; color: #FF6B6B; }
+
+        /* --- 核心信息 (极简版) --- */
+        .info-simple {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        .info-pill {
+            background: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            color: #555;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .info-pill i { font-style: normal; font-size: 1.1rem; }
+
+        /* --- 功能按钮区 (更可爱) --- */
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            width: 100%;
+            padding: 0 10px;
+            margin-bottom: 20px;
+        }
+
+        .cute-btn {
+            border: none;
+            padding: 15px;
+            border-radius: 20px;
+            font-family: inherit;
+            cursor: pointer;
+            transition: transform 0.1s, box-shadow 0.1s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cute-btn:active { transform: scale(0.96); }
+        
+        .btn-ai {
+            background: #E0F7FA;
+            color: #006064;
+            box-shadow: 0 4px 0 #B2EBF2;
+        }
+        .btn-luck {
+            background: #FFF3E0;
+            color: #E65100;
+            box-shadow: 0 4px 0 #FFE0B2;
+        }
+
+        .btn-icon { font-size: 2rem; margin-bottom: 2px; }
+        .btn-label { font-size: 1rem; font-weight: bold; }
+        .btn-sub { font-size: 0.7rem; opacity: 0.7; }
+
+        /* --- 模态框样式 --- */
+        .modal-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s;
+            z-index: 100;
+            backdrop-filter: blur(3px);
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+
+        .modal-box {
+            background: white;
+            width: 85%;
+            padding: 25px;
+            border-radius: 25px;
+            text-align: center;
+            transform: scale(0.8);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            border: 4px solid #FFD93D;
+        }
+        .modal-overlay.active .modal-box { transform: scale(1); }
+
+        .close-btn {
+            position: absolute;
+            top: 10px; right: 10px;
+            width: 30px; height: 30px;
+            background: #eee;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            color: #666;
+        }
+
+        /* 运势签样式 */
+        .fortune-stick {
+            font-size: 1.2rem;
+            color: #D9381E;
+            font-weight: bold;
+            margin: 20px 0;
+            padding: 15px;
+            background: #FFF5E6;
+            border-radius: 10px;
+            border: 2px dashed #FF8E53;
+        }
+
+        /* AI 结果样式 */
+        .ai-result {
+            min-height: 80px;
+            background: #F0F4F8;
+            border-radius: 15px;
+            padding: 15px;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            font-size: 1rem;
+        }
+
+        /* 下雪特效 */
+        .snowflake {
+            color: #fff; font-size: 1em; position: absolute; top: -10%; z-index: 99;
+            animation: snowfall 10s linear infinite; text-shadow: 0 0 2px rgba(0,0,0,0.1);
+        }
+        @keyframes snowfall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(600px) rotate(360deg); opacity: 0; }
+        }
+        .snowflake:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .snowflake:nth-child(2) { left: 40%; animation-delay: 2s; }
+        .snowflake:nth-child(3) { left: 70%; animation-delay: 4s; }
+        .snowflake:nth-child(4) { left: 90%; animation-delay: 1s; }
+
+        /* Spinner */
+        .spinner {
+            width: 20px; height: 20px; border: 3px solid #f3f3f3;
+            border-top: 3px solid #FF6B6B; border-radius: 50%;
+            animation: spin 1s linear infinite; margin: 0 auto; display: none;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .action-btn {
+            background: #FF6B6B; color: white; border: none;
+            padding: 10px 25px; border-radius: 20px;
+            font-family: inherit; font-size: 1rem; cursor: pointer;
+            box-shadow: 0 4px 0 #D9381E;
+            transition: transform 0.1s;
+        }
+        .action-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #D9381E; }
+
+    </style>
+</head>
+<body>
+
+    <div class="snowflake">❄</div>
+    <div class="snowflake">❄</div>
+    <div class="snowflake">❄</div>
+    <div class="snowflake">❄</div>
+
+    <div class="poster-container">
+        <!-- 装饰背景 -->
+        <div class="header-decoration"></div>
+        <div class="header-decoration-2"></div>
+        
+        <div class="content-wrapper">
+            <!-- 极简标题 -->
+            <div class="sub-tag">12.21 冬至活动</div>
+            <h1 class="main-title">冬至 · 团圆</h1>
+            
+            <!-- 可爱插画 -->
+            <div class="hero-illustration">
+                <div class="mascot mascot-persimmon">
+                    <div class="leaf"></div>
+                    <div class="face"><div class="eyes"></div><div class="eyes"></div><div class="mouth"></div></div>
+                </div>
+                <div class="mascot mascot-ingot">
+                    <div class="face"><div class="eyes"></div><div class="eyes"></div><div class="mouth"></div></div>
+                </div>
+                <div class="bowl"><div class="soup"></div></div>
+            </div>
+
+            <!-- 倒计时 (JavaScript驱动) -->
+            <div class="countdown-card">
+                <span class="cd-text">距离开吃还有</span>
+                <span class="cd-time" id="countdown">--天--时</span>
+            </div>
+
+            <!-- 极简信息 -->
+            <div class="info-simple">
+                <div class="info-pill"><i>📍</i> 荟园一楼</div>
+                <div class="info-pill"><i>⏰</i> 周日 18:00</div>
+            </div>
+
+            <!-- 核心功能入口 -->
+            <div class="features-grid">
+                <!-- 运势按钮 -->
+                <button class="cute-btn btn-luck" onclick="openLuckModal()">
+                    <span class="btn-icon">🧧</span>
+                    <span class="btn-label">求个上上签</span>
+                    <span class="btn-sub">测测今日好运</span>
+                </button>
+
+                <!-- AI按钮 -->
+                <button class="cute-btn btn-ai" onclick="openAiModal()">
+                    <span class="btn-icon">✨</span>
+                    <span class="btn-label">AI 写祝福</span>
+                    <span class="btn-sub">送给想念的人</span>
+                </button>
+            </div>
+            
+            <p style="color: #999; font-size: 0.8rem; margin-top: auto;">“柿”事顺心 · 财源广进</p>
+        </div>
+
+        <!-- 运势模态框 -->
+        <div class="modal-overlay" id="luckModal">
+            <div class="modal-box">
+                <button class="close-btn" onclick="closeModal('luckModal')">×</button>
+                <h3 style="color:#E65100; margin-bottom:10px;">🌟 今日冬至运势</h3>
+                <div class="fortune-stick" id="fortuneText">
+                    摇一摇...
+                </div>
+                <button class="action-btn" onclick="drawFortune()">摇一摇</button>
+            </div>
+        </div>
+
+        <!-- AI 模态框 -->
+        <div class="modal-overlay" id="aiModal">
+            <div class="modal-box">
+                <button class="close-btn" onclick="closeModal('aiModal')">×</button>
+                <h3 style="color:#006064; margin-bottom:10px;">🤖 祝福生成器</h3>
+                
+                <div style="display:flex; gap:5px; justify-content:center; margin-bottom:15px; flex-wrap:wrap;">
+                    <button class="action-btn" style="padding:5px 10px; font-size:0.8rem; background:#E0F7FA; color:#006064; box-shadow:none; border:1px solid #006064;" onclick="setContext('friend')">朋友</button>
+                    <button class="action-btn" style="padding:5px 10px; font-size:0.8rem; background:#E0F7FA; color:#006064; box-shadow:none; border:1px solid #006064;" onclick="setContext('crush')">暗恋</button>
+                    <button class="action-btn" style="padding:5px 10px; font-size:0.8rem; background:#E0F7FA; color:#006064; box-shadow:none; border:1px solid #006064;" onclick="setContext('family')">家人</button>
+                </div>
+
+                <div class="ai-result" id="aiResult">
+                    <span style="color:#999">选个对象，点击生成~</span>
+                </div>
+                <div class="spinner" id="spinner"></div>
+
+                <button class="action-btn" style="background:#00BCD4; box-shadow: 0 4px 0 #0097A7;" onclick="generateBlessing()">✨ 立即生成</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script type="module">
+        import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
+
+        // Initialize Gemini
+        const apiKey = ""; 
+        const genAI = new GoogleGenerativeAI(apiKey);
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-preview-09-2025" });
+
+        // --- 倒计时逻辑 ---
+        function updateCountdown() {
+            // 设置目标时间：2025年12月21日 18:00
+            const targetDate = new Date("2025-12-21T18:00:00").getTime();
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance < 0) {
+                document.getElementById("countdown").innerText = "活动进行中!";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            
+            document.getElementById("countdown").innerText = `${days}天 ${hours}小时`;
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // --- 模态框逻辑 ---
+        window.openLuckModal = () => document.getElementById('luckModal').classList.add('active');
+        window.openAiModal = () => document.getElementById('aiModal').classList.add('active');
+        window.closeModal = (id) => document.getElementById(id).classList.remove('active');
+
+        // --- 抽签逻辑 ---
+        const fortunes = [
+            "大吉：今日宜吃芝麻馅汤圆，甜甜蜜蜜！",
+            "上上签：遇见喜欢的人概率 99%！",
+            "中吉：所有的烦恼都会被一口吃掉。",
+            "大吉：这碗汤圆吃下去，期末全过！",
+            "小吉：虽然天冷，但有人在偷偷温暖你。",
+            "特吉：今天会收到意外的惊喜红包！"
+        ];
+
+        window.drawFortune = () => {
+            const textEl = document.getElementById('fortuneText');
+            textEl.innerHTML = "🎲 摇签中...";
+            setTimeout(() => {
+                const random = Math.floor(Math.random() * fortunes.length);
+                textEl.innerHTML = fortunes[random];
+            }, 600);
+        };
+
+        // --- AI 祝福逻辑 ---
+        let currentContext = 'friend';
+        window.setContext = (ctx) => {
+            currentContext = ctx;
+            const map = {friend: "朋友", crush: "暗恋对象", family: "家人"};
+            document.getElementById('aiResult').innerHTML = `<span style="color:#0097A7">已选：给${map[ctx]}</span>`;
+        };
+
+        window.generateBlessing = async () => {
+            const resultEl = document.getElementById('aiResult');
+            const spinner = document.getElementById('spinner');
+            
+            resultEl.style.display = 'none';
+            spinner.style.display = 'block';
+
+            let promptRole = "";
+            if(currentContext === 'friend') promptRole = "给好朋友";
+            if(currentContext === 'crush') promptRole = "给暗恋的人（含蓄一点）";
+            if(currentContext === 'family') promptRole = "给父母家人";
+
+            const prompt = `写一句超级可爱、简短（25字以内）的冬至祝福语。
+            对象：${promptRole}。
+            关键词：汤圆、团圆、暖呼呼。
+            语气：软萌、emoji丰富。直接给内容。`;
+
+            try {
+                const result = await model.generateContent(prompt);
+                const response = await result.response;
+                resultEl.innerText = response.text();
+            } catch (e) {
+                resultEl.innerText = "网络有点卡，汤圆还没熟~";
+            } finally {
+                spinner.style.display = 'none';
+                resultEl.style.display = 'flex';
+            }
+        };
+
+    </script>
+
+</body>
+</html>
